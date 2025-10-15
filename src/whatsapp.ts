@@ -1,9 +1,9 @@
-import axios from "axios";
-import dotenv from "dotenv";
+import axios from 'axios';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const WHATSAPP_API = "https://graph.facebook.com/v24.0";
+const WHATSAPP_API = 'https://graph.facebook.com/v24.0';
 
 // Envia mensagem de texto simples
 export async function sendMessage(to: string, text: string) {
@@ -12,16 +12,16 @@ export async function sendMessage(to: string, text: string) {
   await axios.post(
     url,
     {
-      messaging_product: "whatsapp",
+      messaging_product: 'whatsapp',
       to,
       text: { body: text },
     },
     {
       headers: {
         Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
 }
 
@@ -32,60 +32,63 @@ export async function sendMessageWithButton(to: string, bodyText: string, button
   await axios.post(
     url,
     {
-      messaging_product: "whatsapp",
+      messaging_product: 'whatsapp',
       to,
-      type: "interactive",
+      type: 'interactive',
       interactive: {
-        type: "button",
+        type: 'button',
         body: {
-          text: bodyText
+          text: bodyText,
         },
         action: {
           buttons: [
             {
-              type: "reply",
+              type: 'reply',
               reply: {
-                id: "acessar_site",
-                title: buttonText
-              }
-            }
-          ]
-        }
-      }
+                id: 'acessar_site',
+                title: buttonText,
+              },
+            },
+          ],
+        },
+      },
     },
     {
       headers: {
         Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    }
+    },
   );
 }
 
-export async function sendApprovedTemplate(to: string, templateName: string, languageCode = "pt_BR") {
+export async function sendApprovedTemplate(
+  to: string,
+  templateName: string,
+  languageCode = 'pt_BR',
+) {
   const url = `${WHATSAPP_API}/${process.env.PHONE_NUMBER_ID}/messages`;
 
   try {
     const response = await axios.post(
       url,
       {
-        messaging_product: "whatsapp",
+        messaging_product: 'whatsapp',
         to,
-        type: "template",
+        type: 'template',
         template: {
           name: templateName,
-          language: { code: languageCode }
-        }
+          language: { code: languageCode },
+        },
       },
       {
         headers: {
           Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      }
+      },
     );
-
   } catch (error: any) {
-    console.error("Erro ao enviar template:", error.response?.data || error.message);
+    console.error('Erro ao enviar template:', error.response?.data || error.message);
   }
 }

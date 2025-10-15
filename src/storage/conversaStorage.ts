@@ -1,5 +1,10 @@
-import pkg from "pg";
+import pkg from 'pg';
 const { Pool } = pkg;
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log('PGHOST:', process.env.PGHOST);
 
 // O Pool já pega PGHOST, PGUSER, PGPASSWORD, PGDATABASE, PGPORT automaticamente do .env
 const pool = new Pool();
@@ -26,7 +31,7 @@ async function ensureTableAndConstraint() {
 
   // Cria a constraint se não existir
   if (checkConstraint.rows.length === 0) {
-    console.log("🔧 Criando constraint UNIQUE em user_id...");
+    console.log('🔧 Criando constraint UNIQUE em user_id...');
     await pool.query(`
       ALTER TABLE conversas
       ADD CONSTRAINT conversas_user_id_unique UNIQUE (user_id);
@@ -40,10 +45,9 @@ ensureTableAndConstraint().catch(console.error);
 // Retorna o histórico do usuário
 export async function getHistorico(userId: string): Promise<any[]> {
   await ensureTableAndConstraint();
-  const result = await pool.query(
-    "SELECT historico FROM conversas WHERE user_id = $1 LIMIT 1",
-    [userId]
-  );
+  const result = await pool.query('SELECT historico FROM conversas WHERE user_id = $1 LIMIT 1', [
+    userId,
+  ]);
   if (result.rows.length > 0) {
     return result.rows[0].historico;
   }
@@ -60,6 +64,6 @@ export async function salvarHistorico(userId: string, historico: any[]) {
     ON CONFLICT (user_id)
     DO UPDATE SET historico = $2, atualizado_em = NOW();
     `,
-    [userId, JSON.stringify(historico)]
+    [userId, JSON.stringify(historico)],
   );
 }
