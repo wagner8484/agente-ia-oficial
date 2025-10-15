@@ -25,7 +25,7 @@ export default defineConfig([
       ...tseslint.configs.recommended[0].rules,
 
       // Regras de estilo
-      semi: ['error', 'always'],
+      '@typescript-eslint/semi': ['error', 'always'],
     },
   },
   prettierConfig,

@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { sendMessage, sendApprovedTemplate } from './whatsapp.js';
+import { sendMessage } from './whatsapp.js';
 import { askOpenAI } from './openai.js';
 
 dotenv.config();

@@ -64,6 +64,7 @@ const connectWhatsapp = async () => {
 
         const userText =
           message.message?.conversation || message.message?.extendedTextMessage?.text || '';
+
         const fromArray = [];
 
         fromArray.push(message.key?.remoteJid);
@@ -73,12 +74,12 @@ const connectWhatsapp = async () => {
         console.log(fromArray);
 
         const from = fromArray
-          .filter((id): id is string => typeof id === 'string') // tipo guard
+          .filter((id): id is string => typeof id === 'string')
           .find((id) => id.includes('@s.whatsapp.net'));
 
         if (!from) {
           console.log('⚠️ Nenhum JID @s.whatsapp.net encontrado, ignorando mensagem');
-          return; // ou continue; dependendo do contexto
+          return;
         }
 
         console.log(from);
@@ -88,7 +89,7 @@ const connectWhatsapp = async () => {
         console.log(message);
 
         try {
-          messageStoreCache.set(message.key.remoteJid, message);
+          messageStoreCache.set(from, message);
 
           await processUniqueMessage(message, async () => {
             const resposta = await askOpenAI(userText, from);
