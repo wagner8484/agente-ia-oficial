@@ -70,7 +70,7 @@ export async function sendApprovedTemplate(
   const url = `${WHATSAPP_API}/${process.env.PHONE_NUMBER_ID}/messages`;
 
   try {
-    const response = await axios.post(
+    await axios.post(
       url,
       {
         messaging_product: 'whatsapp',

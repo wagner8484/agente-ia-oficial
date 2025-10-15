@@ -41,9 +41,6 @@ export async function askOpenAI(prompt: string, userId: string): Promise<string>
   // 4️⃣ Se o modelo pediu para chamar uma função
   if (choice.message?.function_call) {
     const functionName = choice.message.function_call.name;
-    const args = choice.message.function_call.arguments
-      ? JSON.parse(choice.message.function_call.arguments)
-      : {};
 
     let functionResult = '';
 
